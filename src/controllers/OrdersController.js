@@ -7,7 +7,7 @@ class OrdersController {
         const user_id = request.user.id;
 
         
-        const order_id = await knex("orders").insert({
+        const order_id = await knex("OrderHistory").insert({
             orderStatus,
             totalPrice,
             paymentMethod,
