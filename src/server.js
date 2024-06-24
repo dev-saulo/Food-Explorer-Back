@@ -1,10 +1,10 @@
 require("express-async-errors");
 require("dotenv/config");
+const AppError = require("./utils/AppError");
 
 const uploadConfig = require("./configs/upload");
 
 const express = require('express');
-const AppError = require("./utils/AppError");
 
 const routes = require("./routes");
 const database = require("./database/sqlite");
@@ -13,8 +13,8 @@ const database = require("./database/sqlite");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 
 app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER));
