@@ -1,7 +1,7 @@
 const fs = require ('fs');
 const path = require ('path');
 
-const uploadConfig = require('../configs/upload');
+const uploadConfig = require('../configs/uploadAvatar');
 
 class DiskStorageAvatar {
     async saveFile(file){
