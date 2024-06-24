@@ -7,7 +7,7 @@ const uploadConfig = require("./configs/upload");
 const express = require('express');
 
 const routes = require("./routes");
-const database = require("./database/sqlite");
+const database = require("./database/sqlite/migrations");
 
 
 const cors = require("cors");
