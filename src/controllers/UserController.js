@@ -57,8 +57,9 @@ class UsersController {
         user.name = name;
         user.email = email;
 
-        if (password && !old_password) {
-            throw new AppError("Você precisa informar a senha antiga para definir a nova senha");
+
+        if (password && !old_password){
+            throw new AppError  ("Para redefinir a senha é necessário informar a antiga");
         }
 
         if (password && old_password) {
