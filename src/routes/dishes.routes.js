@@ -7,8 +7,8 @@ const DishesController = require("../controllers/DishesController")
 
 const dishesController = new DishesController();
 
-const upload = multer(uploadConfig.MULTER);
 const dishesRoutes = Router();
+const upload = multer(uploadConfig.MULTER);
 
 dishesRoutes.use(ensureAuthenticated);
 

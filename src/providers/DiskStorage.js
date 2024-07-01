@@ -1,29 +1,27 @@
+const { verify } = require("jsonwebtoken");
+const AppError = require("../utils/AppError");
+const authConfig = require("../configs/auth");
 
-const fs = require('fs');
-const path = require('path');
-const uploadConfig = require('../configs/upload');
+function ensureAuthenticated(request, response, next) {
+    const authHeader = request.headers.authorization;
 
-class DiskStorage {
-    async saveFile(file){
-        await fs.promises.rename(
-            path.resolve(uploadConfig.TMP_FOLDER, file),
-            path.resolve(uploadConfig.UPLOADS_FOLDER, file)
-        );
-
-        return file;
+    if(!authHeader) {
+        throw new AppError("JWT Token não informado", 401);
     }
 
-    async deleteFile(file){
-        const filePath = path.resolve(uploadConfig.UPLOADS_FOLDER, file);
+    const [, token] = authHeader.split(" ");
 
-        try {
-            await fs.promises.stat(filePath);
-        } catch {
-            return;
-        }
+    try {
+        const { sub: user_id } = verify(token, authConfig.jwt.secret);
 
-        await fs.promises.unlink(filePath);
+        request.user = {
+            id: Number(user_id),
+        };
+
+        return next();
+    } catch {
+        throw new AppError("JWT Token inválido", 401);
     }
 }
 
-module.exports = DiskStorage;
+module.exports = ensureAuthenticated;

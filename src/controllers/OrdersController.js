@@ -2,11 +2,9 @@ const knex = require("../database/knex");
 
 class OrdersController {
     async create(request, response) {
-        
         const { cart, orderStatus, totalPrice, paymentMethod } = request.body;
         const user_id = request.user.id;
 
-        
         const order_id = await knex("orders").insert({
             orderStatus,
             totalPrice,
@@ -14,7 +12,6 @@ class OrdersController {
             user_id
         });
 
-        
         const itemsInsert = cart.map(cart => {
             return {
                 title: cart.title,
@@ -30,13 +27,10 @@ class OrdersController {
     }
 
     async index(request, response) {
-        
         const user_id = request.user.id;
 
-        
         const user = await knex("users").where({id: user_id}).first();
 
-        
         if (!user.isAdmin) {
 
             const orders = await knex("ordersItems").where({ user_id })
@@ -64,7 +58,6 @@ class OrdersController {
             
             return response.status(200).json(ordersWithItems);
 
-        
         } else {
             const orders = await knex("ordersItems")
                 .select([
@@ -94,10 +87,8 @@ class OrdersController {
     }
 
     async update(request, response) {
-        
         const { id, orderStatus } = request.body;
     
-        
         await knex("orders").update({ orderStatus }).where({ id })
         
         return response.status(201).json();

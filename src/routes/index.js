@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router } = require('express');
 
 const usersRouter = require("./users.routes");
 const dishesRouter = require("./dishes.routes");
@@ -9,7 +9,7 @@ const routes = Router();
 
 routes.use("/users", usersRouter);
 routes.use("/dishes", dishesRouter);
-routes.use("/orderhistory", ordersRouter);
+routes.use("/orders", ordersRouter);
 routes.use("/sessions", sessionsRouter);
 
 module.exports = routes;

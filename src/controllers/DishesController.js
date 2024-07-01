@@ -1,30 +1,23 @@
-// Knex, App Error and Disk Storage Import
 const knex = require("../database/knex");
 const AppError = require('../utils/AppError');
 const DiskStorage = require("../providers/DiskStorage")
 
 class DishesController {
     async create(request, response) {
-        
         const { title, description, category, price, ingredients } = request.body;
 
-        
         const checkDishAlreadyExists = await knex("dishes").where({title}).first();
     
         if(checkDishAlreadyExists){
             throw new AppError("Este prato já existe no cardápio.")
         }
 
-        
         const imageFileName = request.file.filename;
 
-        
         const diskStorage = new DiskStorage()
 
-        
         const filename = await diskStorage.saveFile(imageFileName);
 
-        
         const dish_id = await knex("dishes").insert({
             image: filename,
             title,
@@ -33,7 +26,6 @@ class DishesController {
             category,
         });
 
-        
         const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
         let ingredientsInsert
@@ -59,37 +51,32 @@ class DishesController {
     }
 
     async update(request, response) {
-        
         const { title, description, category, price, ingredients, image } = request.body;
         const { id } = request.params;
 
-        
+        // Requesting image filename
         const imageFileName = request.file.filename;
     
-        
+        // Instantiating diskStorage
         const diskStorage = new DiskStorage();
 
-        
         const dish = await knex("dishes").where({ id }).first();
     
-        
+        // Deleting the old image if a new image is uploaded and saving the new image
         if (dish.image) {
           await diskStorage.deleteFile(dish.image);
         }
     
         const filename = await diskStorage.saveFile(imageFileName);
     
-        
         dish.image = image ?? filename;
         dish.title = title ?? dish.title;
         dish.description = description ?? dish.description;
         dish.category = category ?? dish.category;
         dish.price = price ?? dish.price;
 
-        
         await knex("dishes").where({ id }).update(dish);
     
-        
         const hasOnlyOneIngredient = typeof(ingredients) === "string";
 
         let ingredientsInsert
@@ -116,10 +103,8 @@ class DishesController {
     }
 
     async show(request, response) {
-        
         const { id } = request.params;
 
-        
         const dish = await knex("dishes").where({ id }).first();
         const ingredients = await knex("ingredients").where({ dish_id: id }).orderBy("name");
 
@@ -130,20 +115,16 @@ class DishesController {
     }
 
     async delete(request, response) {
-        
         const { id } = request.params;
 
-        
         await knex("dishes").where({ id }).delete();
 
         return response.status(202).json();
     }
 
     async index(request, response) {
-        
         const { title, ingredients } = request.query;
 
-        
         let dishes;
 
         if (ingredients) {

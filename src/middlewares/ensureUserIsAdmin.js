@@ -7,7 +7,7 @@ async function ensureUserIsAdmin(request, response, next) {
     const user = await knex("users").where({id: user_id}).first();
 
     if (!user.isAdmin) {
-        throw new AppError("Acesso não autorizado!", 401)
+        throw new AppError("Access Denied: Unauthorized User", 401)
     }
 
     next();
