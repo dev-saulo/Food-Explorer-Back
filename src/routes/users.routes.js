@@ -2,7 +2,7 @@ const { Router } = require('express');
 const multer = require('multer');
 const uploadConfig = require('../configs/upload');
 
-const UsersController = require("../controllers/UsersController")
+const UsersController = require("../controllers/UserController")
 const UserAvatarController = require("../controllers/UserAvatarController");
 
 const usersController = new UsersController();
